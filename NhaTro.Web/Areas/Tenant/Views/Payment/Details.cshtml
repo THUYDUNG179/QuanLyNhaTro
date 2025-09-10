@@ -1,0 +1,65 @@
+﻿@model NhaTro.Application.DTOs.PaymentDto
+
+@{
+    ViewData["Title"] = "Chi tiết Thanh toán";
+    Layout = "~/Areas/Tenant/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chi tiết Thanh toán</h2>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Mã thanh toán</dt>
+            <dd class="col-sm-9">@Model.PaymentId</dd>
+
+            <dt class="col-sm-3">Hóa đơn</dt>
+            <dd class="col-sm-9">@Model.InvoiceId</dd>
+
+            @if (!string.IsNullOrEmpty(Model.InvoiceBillingPeriod))
+            {
+                <dt class="col-sm-3">Kỳ thanh toán</dt>
+                <dd class="col-sm-9">@Model.InvoiceBillingPeriod</dd>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.ContractCode))
+            {
+                <dt class="col-sm-3">Mã hợp đồng</dt>
+                <dd class="col-sm-9">@Model.ContractCode</dd>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.RoomName))
+            {
+                <dt class="col-sm-3">Phòng</dt>
+                <dd class="col-sm-9">@Model.RoomName</dd>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.MotelName))
+            {
+                <dt class="col-sm-3">Nhà trọ</dt>
+                <dd class="col-sm-9">@Model.MotelName</dd>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.TenantName))
+            {
+                <dt class="col-sm-3">Người thuê</dt>
+                <dd class="col-sm-9">@Model.TenantName</dd>
+            }
+
+            <dt class="col-sm-3">Số tiền</dt>
+            <dd class="col-sm-9">@Model.Amount.ToString("#,##0 'đ'")</dd>
+
+            <dt class="col-sm-3">Ngày thanh toán</dt>
+            <dd class="col-sm-9">@Model.PaymentDate.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Phương thức</dt>
+            <dd class="col-sm-9">@Model.Method</dd>
+
+            <dt class="col-sm-3">Trạng thái</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+
+            <dt class="col-sm-3">Ngày tạo</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+        </dl>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

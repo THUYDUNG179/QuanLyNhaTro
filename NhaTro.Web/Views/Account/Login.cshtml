@@ -1,0 +1,41 @@
+﻿@model NhaTro.Web.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center mb-4">Đăng nhập</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="Login" method="post">
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" class="form-control" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+    <p class="text-center mt-3">
+        Chưa có tài khoản? <a asp-action="Register">Đăng ký</a>
+    </p>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("form").validate({
+                rules: {
+                    Email: { required: true, email: true },
+                    Password: { required: true }
+                },
+                messages: {
+                    Email: { required: "Vui lòng nhập email", email: "Email không hợp lệ" },
+                    Password: { required: "Vui lòng nhập mật khẩu" }
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.PaymentDto>
+@{
+    ViewData["Title"] = "Danh sách Thanh toán";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách Thanh toán</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã thanh toán</th>
+            <th>Hóa đơn</th>
+            <th>Số tiền</th>
+            <th>Ngày thanh toán</th>
+            <th>Phương thức</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var payment in Model)
+        {
+            <tr>
+                <td>@payment.PaymentId</td>
+                <td>@payment.InvoiceId</td>
+                <td>@payment.Amount.ToString("#,##0 'đ'")</td>
+                <td>@payment.PaymentDate.ToString("dd/MM/yyyy")</td>
+                <td>@payment.Method</td>
+                <td>@payment.Status</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@payment.PaymentId" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@payment.PaymentId" class="btn btn-warning btn-sm">Sửa</a>
+                    <form asp-action="Delete" asp-route-id="@payment.PaymentId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

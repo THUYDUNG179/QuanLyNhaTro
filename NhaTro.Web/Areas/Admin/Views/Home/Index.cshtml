@@ -1,0 +1,62 @@
+﻿@{
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Bảng điều khiển Admin</h2>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Người dùng</h5>
+                <p class="card-text">Xem và quản lý tất cả người dùng trong hệ thống.</p>
+                <a asp-controller="User" asp-action="Index" class="btn btn-primary">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Nhà trọ</h5>
+                <p class="card-text">Quản lý danh sách nhà trọ và thông tin chi tiết.</p>
+                <a asp-controller="Motel" asp-action="Index" class="btn btn-primary">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Hợp đồng</h5>
+                <p class="card-text">Xem và quản lý các hợp đồng thuê phòng.</p>
+                <a asp-controller="Contract" asp-action="Index" class="btn btn-primary">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Hóa đơn</h5>
+                <p class="card-text">Quản lý hóa đơn thanh toán.</p>
+                <a asp-controller="Invoice" asp-action="Index" class="btn btn-primary">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Thanh toán</h5>
+                <p class="card-text">Xem và quản lý các khoản thanh toán.</p>
+                <a asp-controller="Payment" asp-action="Index" class="btn btn-primary">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Sự cố</h5>
+                <p class="card-text">Xử lý các báo cáo sự cố từ người thuê.</p>
+                <a asp-controller="Incident" asp-action="Index" class="btn btn-primary">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+﻿@model NhaTro.Application.DTOs.UtilityReadingDto
+@{
+    ViewData["Title"] = "Chi tiết Chỉ số Tiện ích";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chi tiết Chỉ số Tiện ích</h2>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Mã chỉ số</dt>
+            <dd class="col-sm-9">@Model.ReadingId</dd>
+            <dt class="col-sm-3">Phòng</dt>
+            <dd class="col-sm-9">@Model.RoomId</dd>
+            <dt class="col-sm-3">Tiện ích</dt>
+            <dd class="col-sm-9">@Model.UtilityId</dd>
+            <dt class="col-sm-3">Giá trị</dt>
+            <dd class="col-sm-9">@Model.ReadingValue</dd>
+            <dt class="col-sm-3">Ngày đọc</dt>
+            <dd class="col-sm-9">@Model.ReadingDate.ToString("dd/MM/yyyy")</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.ReadingId" class="btn btn-warning">Sửa</a>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

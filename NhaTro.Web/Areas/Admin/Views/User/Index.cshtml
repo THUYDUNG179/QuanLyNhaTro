@@ -1,0 +1,42 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.UserDto>
+@{
+    ViewData["Title"] = "Danh sách Người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách Người dùng</h2>
+<p>
+    <a asp-action="Create" class="btn btn-success">Tạo mới</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Vai trò</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+                <td>@user.Phone</td>
+                <td>@(user.RoleId == 1 ? "Admin" : user.RoleId == 2 ? "Chủ nhà trọ" : "Người thuê")</td>
+                <td>@(user.IsActive ? "Hoạt động" : "Khóa")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@user.UserId" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-warning btn-sm">Sửa</a>
+                    <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

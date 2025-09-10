@@ -1,0 +1,112 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.NotificationDto>
+
+@{
+    ViewData["Title"] = "Thông báo";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Danh sách Thông báo</h2>
+        <div>
+            <a asp-action="Create" class="btn btn-primary me-2">Gửi thông báo mới</a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <form asp-action="Index" method="get" class="mb-3">
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label for="unreadOnly" class="col-form-label">Hiển thị:</label>
+            </div>
+            <div class="col-auto">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="unreadOnly" name="unreadOnly" value="true" checked="@(ViewBag.UnreadOnly == true)">
+                    <label class="form-check-label" for="unreadOnly">Chỉ thông báo chưa đọc</label>
+                </div>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-outline-primary">Lọc</button>
+            </div>
+            <div class="col-auto">
+                <a asp-action="Index" class="btn btn-outline-secondary">Xóa bộ lọc</a>
+            </div>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Tiêu đề</th>
+                    <th>Nội dung</th>
+                    <th>Liên quan đến</th>
+                    <th>Trạng thái</th>
+                    <th>Thời gian</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.Raw(item.Content.Length > 50 ? item.Content.Substring(0, 50) + "..." : item.Content)
+                            </td>
+                            <td>
+                                @if (item.RelatedMotelId.HasValue)
+                                {
+                                    <span>Nhà trọ: @item.RelatedMotelId</span>
+                                }
+                                @if (item.RelatedRoomId.HasValue)
+                                {
+                                    <span>Phòng: @item.RelatedRoomId</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.IsRead)
+                                {
+                                    <span class="badge bg-success">Đã đọc</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Chưa đọc</span>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedAt)
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.NotificationId" class="btn btn-sm btn-info me-1">Chi tiết</a>
+                                <a asp-action="Edit" asp-route-id="@item.NotificationId" class="btn btn-sm btn-warning me-1">Sửa</a>
+								<form asp-action="Delete" asp-route-id="@item.NotificationId" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa thông báo này?');">
+									@Html.AntiForgeryToken()
+									<button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+								</form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">Không có thông báo nào.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

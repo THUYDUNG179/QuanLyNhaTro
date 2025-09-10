@@ -1,0 +1,24 @@
+﻿```cshtml
+@model NhaTro.Application.DTOs.ContractDto
+@{
+    ViewData["Title"] = "Xóa hợp đồng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Xóa hợp đồng</h2>
+<h4>Bạn có chắc muốn xóa hợp đồng này?</h4>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Phòng</dt>
+        <dd class="col-sm-10">@Model.RoomId</dd>
+        <dt class="col-sm-2">Người thuê</dt>
+        <dd class="col-sm-10">@Model.TenantId</dd>
+        <dt class="col-sm-2">Ngày bắt đầu</dt>
+        <dd class="col-sm-10">@Model.StartDate.ToString("dd/MM/yyyy")</dd>
+    </dl>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="ContractId" />
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+```

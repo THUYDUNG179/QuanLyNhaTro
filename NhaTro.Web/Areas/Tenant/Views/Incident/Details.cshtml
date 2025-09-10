@@ -1,0 +1,41 @@
+﻿@model NhaTro.Application.DTOs.IncidentDto
+
+@{
+    ViewData["Title"] = "Chi tiết sự cố";
+    Layout = "~/Areas/Tenant/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mb-4">Chi tiết sự cố</h1>
+
+<div class="card">
+    <div class="card-header bg-info text-white">
+        <h3>@Model.Title</h3>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Mô tả</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+
+            <dt class="col-sm-3">Phòng</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.RoomName)</dd>
+
+            <dt class="col-sm-3">Trạng thái</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Status)</dd>
+
+            <dt class="col-sm-3">Ngày tạo</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.CreatedAt)</dd>
+
+            @if (!string.IsNullOrEmpty(Model.AttachedImagePath))
+            {
+                <dt class="col-sm-3">Hình ảnh đính kèm</dt>
+                <dd class="col-sm-9">
+                    <img src="@Model.AttachedImagePath" alt="Hình ảnh sự cố" class="img-fluid rounded" />
+                </dd>
+            }
+        </dl>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+</div>

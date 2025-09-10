@@ -1,0 +1,22 @@
+﻿```cshtml
+@model NhaTro.Application.DTOs.RoomDto
+@{
+    ViewData["Title"] = "Xóa phòng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Xóa phòng</h2>
+<h4>Bạn có chắc muốn xóa phòng này?</h4>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Tên phòng</dt>
+        <dd class="col-sm-10">@Model.RoomName</dd>
+        <dt class="col-sm-2">Nhà trọ</dt>
+        <dd class="col-sm-10">@Model.MotelId</dd>
+    </dl>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="RoomId" />
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+```

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.RoomDto>
+@{
+    ViewData["Title"] = "Danh sách Phòng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách Phòng</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên phòng</th>
+            <th>Nhà trọ</th>
+            <th>Giá thuê</th>
+            <th>Diện tích</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in Model)
+        {
+            <tr>
+                <td>@room.RoomName</td>
+                <td>@room.MotelId</td>
+                <td>@room.RentalPrice.ToString("#,##0 'đ'")</td>
+                <td>@room.Area</td>
+                <td>@room.RoomStatusId</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@room.RoomId" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@room.RoomId" class="btn btn-warning btn-sm">Sửa</a>
+                    <form asp-action="Delete" asp-route-id="@room.RoomId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

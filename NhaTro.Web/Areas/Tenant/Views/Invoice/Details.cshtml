@@ -1,0 +1,29 @@
+﻿@model NhaTro.Application.DTOs.InvoiceDto
+@{
+    ViewData["Title"] = "Chi tiết Hóa đơn";
+    Layout = "~/Areas/Tenant/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chi tiết Hóa đơn</h2>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Mã hóa đơn</dt>
+            <dd class="col-sm-9">@Model.InvoiceId</dd>
+            <dt class="col-sm-3">Hợp đồng</dt>
+            <dd class="col-sm-9">@Model.ContractId</dd>
+            <dt class="col-sm-3">Kỳ thanh toán</dt>
+            <dd class="col-sm-9">@Model.BillingPeriod</dd>
+            <dt class="col-sm-3">Ngày đến hạn</dt>
+            <dd class="col-sm-9">@Model.DueDate.ToString("dd/MM/yyyy")</dd>
+            <td>@Model.TotalAmount.ToString("C")</td>
+            <dt class="col-sm-3">Trạng thái</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+            <dt class="col-sm-3">Ghi chú</dt>
+            <dd class="col-sm-9">@Model.Notes</dd>
+            <dt class="col-sm-3">Ngày tạo</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy")</dd>
+        </dl>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

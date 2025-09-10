@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Bảng điều khiển Owner";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h2 class="h3 mb-0 text-gray-800">Bảng điều khiển Chủ trọ</h2>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col">
+        <div class="card h-100 border-left-primary shadow-sm">
+            <div class="card-body d-flex flex-column text-center">
+                <i class="fas fa-home fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">Quản lý Nhà trọ</h5>
+                <p class="card-text">Xem và quản lý nhà trọ của bạn.</p>
+                <a asp-controller="Motel" asp-action="Index" class="btn btn-primary mt-auto">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100 border-left-success shadow-sm">
+            <div class="card-body d-flex flex-column text-center">
+                <i class="fas fa-file-signature fa-3x text-success mb-3"></i>
+                <h5 class="card-title">Quản lý Hợp đồng</h5>
+                <p class="card-text">Xem và quản lý các hợp đồng thuê phòng.</p>
+                <a asp-controller="Contract" asp-action="Index" class="btn btn-success mt-auto">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100 border-left-info shadow-sm">
+            <div class="card-body d-flex flex-column text-center">
+                <i class="fas fa-file-invoice-dollar fa-3x text-info mb-3"></i>
+                <h5 class="card-title">Quản lý Hóa đơn</h5>
+                <p class="card-text">Quản lý hóa đơn thanh toán.</p>
+                <a asp-controller="Invoice" asp-action="Index" class="btn btn-info mt-auto">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100 border-left-warning shadow-sm">
+            <div class="card-body d-flex flex-column text-center">
+                <i class="fas fa-credit-card fa-3x text-warning mb-3"></i>
+                <h5 class="card-title">Quản lý Thanh toán</h5>
+                <p class="card-text">Xem và quản lý các khoản thanh toán.</p>
+                <a asp-controller="Payment" asp-action="Index" class="btn btn-warning mt-auto">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100 border-left-danger shadow-sm">
+            <div class="card-body d-flex flex-column text-center">
+                <i class="fas fa-bell fa-3x text-danger mb-3"></i>
+                <h5 class="card-title">Quản lý Thông báo</h5>
+                <p class="card-text">Quản lý thông báo hệ thống.</p>
+                <a asp-controller="Notification" asp-action="Index" class="btn btn-danger mt-auto">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100 border-left-secondary shadow-sm">
+            <div class="card-body d-flex flex-column text-center">
+                <i class="fas fa-tools fa-3x text-secondary mb-3"></i>
+                <h5 class="card-title">Quản lý Sự cố</h5>
+                <p class="card-text">Xử lý các báo cáo sự cố từ người thuê.</p>
+                <a asp-controller="Incident" asp-action="Index" class="btn btn-secondary mt-auto">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+
+    .border-left-primary {
+        border-left: 0.25rem solid #4e73df !important;
+    }
+
+    .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+    }
+
+    .border-left-info {
+        border-left: 0.25rem solid #36b9cc !important;
+    }
+
+    .border-left-warning {
+        border-left: 0.25rem solid #f6c23e !important;
+    }
+
+    .border-left-danger {
+        border-left: 0.25rem solid #e74a3b !important;
+    }
+
+    .border-left-secondary {
+        border-left: 0.25rem solid #858796 !important;
+    }
+</style>

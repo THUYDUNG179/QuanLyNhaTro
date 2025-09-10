@@ -1,0 +1,37 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.IncidentDto>
+@{
+    ViewData["Title"] = "Sự cố của tôi";
+    Layout = "~/Areas/Tenant/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách Sự cố</h2>
+<p>
+    <a asp-action="Create" class="btn btn-success">Báo cáo mới</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã sự cố</th>
+            <th>Phòng</th>
+            <th>Tiêu đề</th>
+            <th>Mô tả</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var incident in Model)
+        {
+            <tr>
+                <td>@incident.IncidentId</td>
+                <td>@incident.RoomName</td>
+                <td>@incident.Title</td>
+                <td>@incident.Description</td>
+                <td>@incident.Status</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@incident.IncidentId" class="btn btn-info btn-sm">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

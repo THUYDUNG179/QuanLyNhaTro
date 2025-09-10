@@ -1,0 +1,45 @@
+﻿@model NhaTro.Application.DTOs.CreateMotelDto
+@{
+    ViewData["Title"] = "Tạo Nhà trọ";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Tạo Nhà trọ</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="OwnerId" />
+    <div class="mb-3">
+        <label asp-for="MotelName" class="form-label"></label>
+        <input asp-for="MotelName" class="form-control" />
+        <span asp-validation-for="MotelName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Tạo</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("form").validate({
+                rules: {
+                    MotelName: { required: true },
+                    Address: { required: true }
+                },
+                messages: {
+                    MotelName: { required: "Vui lòng nhập tên nhà trọ" },
+                    Address: { required: "Vui lòng nhập địa chỉ" }
+                }
+            });
+        });
+    </script>
+}

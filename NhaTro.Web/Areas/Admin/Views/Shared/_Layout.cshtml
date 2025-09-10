@@ -1,0 +1,272 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Panel - @ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f4f7f9;
+            transition: margin-left 0.3s;
+        }
+
+        #sidebar {
+            min-width: 280px;
+            max-width: 280px;
+            background: #34495e; /* Màu nền xanh dương của trời */
+            color: #ecf0f1;
+            transition: all 0.3s;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        /* Ẩn sidebar trên màn hình nhỏ */
+        @@media (max-width: 991.98px) {
+            #sidebar {
+                margin-left: -280px;
+            }
+
+                #sidebar.show {
+                    margin-left: 0;
+                }
+        }
+
+        /* Chức năng thu gọn sidebar */
+        body.collapsed #sidebar {
+            width: 80px;
+            min-width: 80px;
+            max-width: 80px;
+        }
+
+        body.collapsed #content-wrapper {
+            margin-left: 80px;
+        }
+
+        body.collapsed .sidebar-header,
+        body.collapsed .sidebar-text,
+        body.collapsed .chevron-icon {
+            display: none;
+        }
+
+        body.collapsed .list-group-item {
+            justify-content: center;
+        }
+
+            body.collapsed .list-group-item i {
+                margin-right: 0;
+            }
+
+        #sidebar .list-group-item {
+            background: transparent;
+            color: #ecf0f1;
+            border: none;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+            #sidebar .list-group-item:hover,
+            #sidebar .list-group-item:focus {
+                background-color: #44607d;
+                color: #fff;
+            }
+
+            #sidebar .list-group-item.active {
+                background-color: #5DADE2; /* Màu nền xanh của trời cho mục active */
+                color: #fff;
+                border-left: 5px solid #2c3e50; /* Màu viền xanh dương đậm */
+            }
+
+            #sidebar .list-group-item i {
+                margin-right: 15px;
+                width: 20px;
+                text-align: center;
+            }
+
+        .sidebar-header {
+            padding: 1.5rem 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: display 0.3s;
+        }
+
+        #content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-left: 280px;
+            transition: margin-left 0.3s;
+        }
+
+        @@media (max-width: 991.98px) {
+            #content-wrapper {
+                margin-left: 0;
+            }
+        }
+
+        .navbar {
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .main-content {
+            padding: 2rem;
+            flex-grow: 1;
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        .user-dropdown .dropdown-toggle {
+            display: flex;
+            align-items: center;
+        }
+
+            .user-dropdown .dropdown-toggle img {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+        .chevron-icon {
+            transition: transform 0.3s;
+        }
+
+            .chevron-icon.rotate {
+                transform: rotate(-180deg);
+            }
+    </style>
+</head>
+<body>
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            Admin Panel
+        </div>
+        <div class="list-group list-group-flush">
+            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="list-group-item list-group-item-action py-3">
+                <i class="fas fa-tachometer-alt"></i> <span class="sidebar-text">Dashboard</span>
+            </a>
+
+            <a href="#contractSubmenu" data-bs-toggle="collapse" class="list-group-item list-group-item-action py-3">
+                <i class="fas fa-file-contract"></i> <span class="sidebar-text">Quản lý Hợp đồng</span> <i class="fas fa-chevron-down ms-auto chevron-icon"></i>
+            </a>
+            <div class="collapse" id="contractSubmenu">
+                <a asp-area="Admin" asp-controller="Contract" asp-action="Index" class="list-group-item list-group-item-action ps-5"><i class="fas fa-list-alt"></i> <span class="sidebar-text">Danh sách Hợp đồng</span></a>
+                <a asp-area="Admin" asp-controller="Invoice" asp-action="Index" class="list-group-item list-group-item-action ps-5"><i class="fas fa-receipt"></i> <span class="sidebar-text">Hóa đơn</span></a>
+                <a asp-area="Admin" asp-controller="Payment" asp-action="Index" class="list-group-item list-group-item-action ps-5"><i class="fas fa-credit-card"></i> <span class="sidebar-text">Thanh toán</span></a>
+            </div>
+
+            <a href="#propertySubmenu" data-bs-toggle="collapse" class="list-group-item list-group-item-action py-3">
+                <i class="fas fa-building"></i> <span class="sidebar-text">Quản lý Tài sản</span> <i class="fas fa-chevron-down ms-auto chevron-icon"></i>
+            </a>
+            <div class="collapse" id="propertySubmenu">
+                <a asp-area="Admin" asp-controller="Motel" asp-action="Index" class="list-group-item list-group-item-action ps-5"><i class="fas fa-door-open"></i> <span class="sidebar-text">Nhà trọ</span></a>
+            </div>
+
+            <a asp-area="Admin" asp-controller="Incident" asp-action="Index" class="list-group-item list-group-item-action py-3">
+                <i class="fas fa-exclamation-triangle"></i> <span class="sidebar-text">Quản lý Sự cố</span>
+            </a>
+
+            <a asp-area="Admin" asp-controller="User" asp-action="Index" class="list-group-item list-group-item-action py-3">
+                <i class="fas fa-users"></i> <span class="sidebar-text">Người dùng</span>
+            </a>
+        </div>
+    </nav>
+
+    <div id="content-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <button class="btn btn-outline-secondary d-lg-none me-2" type="button" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <button class="btn btn-outline-secondary d-none d-lg-block me-2" type="button" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <span class="navbar-brand">@ViewData["Title"]</span>
+            <div class="ms-auto">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="dropdown user-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @(Context.User.Identity.IsAuthenticated ? Context.User.Identity.Name : "Tài khoản")
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUser">
+                            <li>
+                                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item">
+                                    <button type="submit" class="btn btn-link text-decoration-none p-0 border-0 bg-transparent text-dark w-100 text-start"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-primary me-2">Đăng nhập</a>
+                    <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-outline-primary">Đăng ký</a>
+                }
+            </div>
+        </nav>
+
+        <main class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        // Toggle sidebar trên màn hình nhỏ
+        document.getElementById("sidebarToggle").addEventListener("click", function () {
+            document.getElementById("sidebar").classList.toggle("show");
+        });
+
+        // Xử lý mũi tên khi menu con mở/đóng
+        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(item => {
+            item.addEventListener('click', event => {
+                const targetId = item.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                const chevron = item.querySelector('.chevron-icon');
+
+                if (chevron) {
+                    if (targetElement.classList.contains('show')) {
+                        chevron.classList.remove('rotate');
+                    } else {
+                        chevron.classList.add('rotate');
+                    }
+                }
+            });
+        });
+
+        // Chức năng thu gọn toàn bộ sidebar
+        document.getElementById("toggleSidebar").addEventListener("click", function() {
+            document.body.classList.toggle("collapsed");
+        });
+    </script>
+</body>
+</html>

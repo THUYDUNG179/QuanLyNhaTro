@@ -1,0 +1,36 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.RoomStatusDto>
+@{
+    ViewData["Title"] = "Danh sách Trạng thái Phòng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách Trạng thái Phòng</h2>
+<p>
+    <a asp-action="Create" class="btn btn-success">Tạo mới</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã trạng thái</th>
+            <th>Tên trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var status in Model)
+        {
+            <tr>
+                <td>@status.RoomStatusId</td>
+                <td>@status.StatusName</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@status.RoomStatusId" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@status.RoomStatusId" class="btn btn-warning btn-sm">Sửa</a>
+                    <form asp-action="Delete" asp-route-id="@status.RoomStatusId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

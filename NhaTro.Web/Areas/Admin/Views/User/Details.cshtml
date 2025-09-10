@@ -1,0 +1,27 @@
+﻿@model NhaTro.Application.DTOs.UserDto
+@{
+    ViewData["Title"] = "Chi tiết Người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chi tiết Người dùng</h2>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Họ tên</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+            <dt class="col-sm-3">Số điện thoại</dt>
+            <dd class="col-sm-9">@Model.Phone</dd>
+            <dt class="col-sm-3">Vai trò</dt>
+            <dd class="col-sm-9">@(Model.RoleId == 1 ? "Admin" : Model.RoleId == 2 ? "Chủ nhà trọ" : "Người thuê")</dd>
+            <dt class="col-sm-3">Trạng thái</dt>
+            <dd class="col-sm-9">@(Model.IsActive ? "Hoạt động" : "Khóa")</dd>
+            <dt class="col-sm-3">Ngày tạo</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy")</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-warning">Sửa</a>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

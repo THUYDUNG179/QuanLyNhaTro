@@ -1,0 +1,27 @@
+﻿@model NhaTro.Application.DTOs.RoomDto
+@{
+    ViewData["Title"] = "Chi tiết Phòng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chi tiết Phòng</h2>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Tên phòng</dt>
+            <dd class="col-sm-9">@Model.RoomName</dd>
+            <dt class="col-sm-3">Nhà trọ</dt>
+            <dd class="col-sm-9">@Model.MotelId</dd>
+            <dt class="col-sm-3">Giá thuê</dt>
+            <dd class="col-sm-9">@Model.RentalPrice.ToString("#,##0 'đ'")</dd>
+            <dt class="col-sm-3">Diện tích</dt>
+            <dd class="col-sm-9">@Model.Area</dd>
+            <dt class="col-sm-3">Trạng thái</dt>
+            <dd class="col-sm-9">@Model.RoomStatusId</dd>
+            <dt class="col-sm-3">Ngày tạo</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy")</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.RoomId" class="btn btn-warning">Sửa</a>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

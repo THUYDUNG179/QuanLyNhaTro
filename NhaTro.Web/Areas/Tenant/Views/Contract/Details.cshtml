@@ -1,0 +1,95 @@
+﻿@model NhaTro.Application.DTOs.ContractDto
+
+@{
+    ViewData["Title"] = "Chi tiết Hợp đồng";
+    Layout = "~/Areas/Tenant/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Chi tiết hợp đồng</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">Tên phòng</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.RoomName)</dd>
+
+                            <dt class="col-sm-4">Tên người thuê</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.TenantName)</dd>
+
+                            <dt class="col-sm-4">Ngày bắt đầu</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.StartDate)</dd>
+
+                            <dt class="col-sm-4">Ngày kết thúc</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.EndDate)</dd>
+
+                            <dt class="col-sm-4">Số tiền đặt cọc</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.DepositAmount) VND</dd>
+
+                            <dt class="col-sm-4">Trạng thái</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Status)</dd>
+
+                            <dt class="col-sm-4">Ghi chú</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Notes)</dd>
+
+                            <dt class="col-sm-4">Ngày tạo</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.CreatedAt)</dd>
+                        </dl>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5 class="text-center">Tệp hợp đồng</h5>
+                        <hr />
+                        @if (!string.IsNullOrEmpty(Model.FileContractPath))
+                        {
+                            var fullPath = @Model.FileContractPath;
+                            var fileExtension = System.IO.Path.GetExtension(Model.FileContractPath)?.ToLower();
+                            var isImage = fileExtension == ".jpg" || fileExtension == ".jpeg" || fileExtension == ".png" || fileExtension == ".gif" || fileExtension == ".jfif";
+
+                            if (isImage)
+                            {
+                                <img src="@fullPath" alt="Tệp hợp đồng" class="img-fluid border" style="max-height: 500px; width: auto;" />
+                                
+                            }
+                            else if (fileExtension == ".pdf")
+                            {
+                                <embed src="@fullPath" type="application/pdf" class="w-100 border" style="height: 500px;" />
+                            }
+                            else
+                            {
+                                <div class="alert alert-warning text-center" role="alert">
+                                    Định dạng file không được hỗ trợ để xem trực tiếp.
+                                </div>
+                            }
+
+                            <div class="text-center mt-3">
+                                <a href="@fullPath" class="btn btn-primary" download>
+                                    <i class="fas fa-download"></i> Tải xuống hợp đồng
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info text-center" role="alert">
+                                Không có tệp hợp đồng nào được đính kèm.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <a asp-action="Index" class="btn btn-outline-secondary">Quay lại danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    }
+
+@section Styles {
+    }

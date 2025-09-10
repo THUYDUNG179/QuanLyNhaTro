@@ -1,0 +1,44 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.NotificationDto>
+@{
+    ViewData["Title"] = "Danh sách Thông báo";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách Thông báo</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã thông báo</th>
+            <th>Người gửi</th>
+            <th>Người nhận</th>
+            <th>Tiêu đề</th>
+            <th>Nội dung</th>
+            <th>Loại</th>
+            <th>Đã đọc</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var notification in Model)
+        {
+            <tr>
+                <td>@notification.NotificationId</td>
+                <td>@notification.SenderUserId</td>
+                <td>@notification.ReceiverUserId</td>
+                <td>@notification.Title</td>
+                <td>@notification.Content</td>
+                <td>@notification.Type</td>
+                <td>@(notification.IsRead ? "Đã đọc" : "Chưa đọc")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@notification.NotificationId" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@notification.NotificationId" class="btn btn-warning btn-sm">Sửa</a>
+                    <form asp-action="Delete" asp-route-id="@notification.NotificationId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

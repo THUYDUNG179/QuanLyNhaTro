@@ -1,0 +1,150 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.RoomDto>
+
+@{
+    ViewData["Title"] = "Danh sách Phòng";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml"; // Đảm bảo dùng OwnerLayout
+}
+
+@{
+    string motelName = ViewBag.MotelName as string ?? "Nhà trọ không xác định";
+    int motelId = ViewBag.MotelId as int? ?? 0;
+    string motelAddress = ViewBag.MotelAddress as string ?? "Địa chỉ không xác định";
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info" role="alert">
+        Chưa có phòng nào cho nhà trọ này. <a asp-area="Owner" asp-controller="Room" asp-action="Create" asp-route-motelId="@motelId" class="alert-link">Tạo phòng mới ngay!</a>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Danh sách phòng - @motelName (@motelAddress)</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Tên phòng</th>
+                        <th>Giá thuê</th>
+                        <th>Diện tích</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var room in Model)
+                    {
+                        <tr>
+                            <td>@room.RoomName</td>
+                            <td>@room.RentalPrice.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VNĐ</td>
+                            <td>@(room.Area.HasValue ? $"{room.Area.Value:N2} m²" : "N/A")</td>
+                            <td>
+                                @{
+                                    string statusText;
+                                    string statusClass;
+
+                                    if (room.HasContract)
+                                    {
+                                        statusText = "Đã thuê";
+                                        statusClass = "badge bg-warning text-dark";
+                                    }
+                                    else
+                                    {
+                                        switch (room.RoomStatusId)
+                                        {
+                                            case 1:
+                                                statusText = "Trống";
+                                                statusClass = "badge bg-success";
+                                                break;
+                                            case 2:
+                                                statusText = "Đã thuê";
+                                                statusClass = "badge bg-warning text-dark";
+                                                break;
+                                            case 3:
+                                                statusText = "Bảo trì";
+                                                statusClass = "badge bg-danger";
+                                                break;
+                                            default:
+                                                statusText = "Không xác định";
+                                                statusClass = "badge bg-secondary";
+                                                break;
+                                        }
+                                    }
+                                }
+                                <span class="@statusClass">@statusText</span>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Room", new { id = room.RoomId })" class="btn btn-sm btn-primary" title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-room-id="@room.RoomId" data-room-name="@room.RoomName" title="Xóa">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+
+                                @* Sửa logic hiển thị nút HĐ tại đây *@
+                                @if (room.HasContract)
+                                {
+                                    // Hiển thị nút "Xem HĐ" nếu phòng đã có hợp đồng
+                                    <a asp-area="Owner" asp-controller="Contract" asp-action="Index" asp-route-roomId="@room.RoomId" class="btn btn-sm btn-success" title="Xem hợp đồng">
+                                        <i class="fas fa-search"></i> HĐ
+                                    </a>
+                                }
+                                else
+                                {
+                                    // Hiển thị nút "Tạo HĐ" nếu phòng chưa có hợp đồng
+                                    <a asp-area="Owner" asp-controller="Contract" asp-action="Create" asp-route-roomId="@room.RoomId" class="btn btn-sm btn-info" title="Tạo hợp đồng mới">
+                                        <i class="fas fa-file-signature"></i> HĐ
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@* Modal xác nhận xóa *@
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa phòng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa phòng "<span id="roomToDeleteName"></span>" không?
+            </div>
+            <div class="modal-footer">
+                <form asp-area="Owner" asp-controller="Room" asp-action="DeleteConfirmed" method="post">
+                    <input type="hidden" id="roomToDeleteId" name="id" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var roomId = button.getAttribute('data-room-id');
+            var roomName = button.getAttribute('data-room-name');
+            var modalBodyRoomName = deleteModal.querySelector('#roomToDeleteName');
+            var modalFormInputId = deleteModal.querySelector('#roomToDeleteId');
+
+            modalBodyRoomName.textContent = roomName;
+            modalFormInputId.value = roomId;
+        });
+
+        $(document).ready(function () {
+        });
+    </script>
+}

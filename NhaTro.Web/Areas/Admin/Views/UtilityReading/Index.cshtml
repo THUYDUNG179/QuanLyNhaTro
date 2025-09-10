@@ -1,0 +1,40 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.UtilityReadingDto>
+@{
+    ViewData["Title"] = "Danh sách Chỉ số Tiện ích";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách Chỉ số Tiện ích</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã chỉ số</th>
+            <th>Phòng</th>
+            <th>Tiện ích</th>
+            <th>Giá trị</th>
+            <th>Ngày đọc</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reading in Model)
+        {
+            <tr>
+                <td>@reading.ReadingId</td>
+                <td>@reading.RoomId</td>
+                <td>@reading.UtilityId</td>
+                <td>@reading.ReadingValue</td>
+                <td>@reading.ReadingDate.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@reading.ReadingId" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@reading.ReadingId" class="btn btn-warning btn-sm">Sửa</a>
+                    <form asp-action="Delete" asp-route-id="@reading.ReadingId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

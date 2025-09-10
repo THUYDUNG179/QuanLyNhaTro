@@ -1,0 +1,68 @@
+﻿@model NhaTro.Application.DTOs.PaymentDto
+@{
+    ViewData["Title"] = "Sửa Thanh toán";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sửa Thanh toán</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="PaymentId" />
+    <div class="mb-3">
+        <label asp-for="InvoiceId" class="form-label">Hóa đơn</label>
+        <select asp-for="InvoiceId" class="form-select" asp-items="@ViewBag.Invoices"></select>
+        <span asp-validation-for="InvoiceId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Amount" class="form-label"></label>
+        <input asp-for="Amount" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="PaymentDate" class="form-label"></label>
+        <input asp-for="PaymentDate" class="form-control" type="date" />
+        <span asp-validation-for="PaymentDate" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Method" class="form-label"></label>
+        <select asp-for="Method" class="form-select">
+            <option value="Cash">Tiền mặt</option>
+            <option value="Bank Transfer">Chuyển khoản</option>
+            <option value="Other">Khác</option>
+        </select>
+        <span asp-validation-for="Method" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <select asp-for="Status" class="form-select">
+            <option value="Success">Thành công</option>
+            <option value="Failed">Thất bại</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("form").validate({
+                rules: {
+                    InvoiceId: { required: true },
+                    Amount: { required: true, min: 0 },
+                    PaymentDate: { required: true },
+                    Method: { required: true },
+                    Status: { required: true }
+                },
+                messages: {
+                    InvoiceId: { required: "Vui lòng chọn hóa đơn" },
+                    Amount: { required: "Vui lòng nhập số tiền", min: "Số tiền phải lớn hơn 0" },
+                    PaymentDate: { required: "Vui lòng chọn ngày thanh toán" },
+                    Method: { required: "Vui lòng chọn phương thức" },
+                    Status: { required: "Vui lòng chọn trạng thái" }
+                }
+            });
+        });
+    </script>
+}

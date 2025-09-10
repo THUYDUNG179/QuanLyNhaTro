@@ -1,0 +1,22 @@
+﻿```cshtml
+@model NhaTro.Application.DTOs.RoomStatusDto
+@{
+    ViewData["Title"] = "Chỉnh sửa trạng thái phòng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Chỉnh sửa trạng thái phòng</h2>
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="RoomStatusId" />
+    <div class="mb-3">
+        <label asp-for="StatusName" class="form-label"></label>
+        <input asp-for="StatusName" class="form-control" />
+        <span asp-validation-for="StatusName" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+```

@@ -1,0 +1,83 @@
+﻿@model NhaTro.Application.DTOs.IncidentDto
+@{
+    ViewData["Title"] = "Sửa Sự cố";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sửa Sự cố</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="IncidentId" />
+    <div class="mb-3">
+        <label asp-for="RoomId" class="form-label">Phòng</label>
+        <select asp-for="RoomId" class="form-select" asp-items="@ViewBag.Rooms"></select>
+        <span asp-validation-for="RoomId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="TenantId" class="form-label">Người thuê</label>
+        <select asp-for="TenantId" class="form-select" asp-items="@ViewBag.Tenants"></select>
+        <span asp-validation-for="TenantId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Priority" class="form-label"></label>
+        <select asp-for="Priority" class="form-select">
+            <option value="Low">Thấp</option>
+            <option value="Normal">Bình thường</option>
+            <option value="High">Cao</option>
+            <option value="Urgent">Khẩn cấp</option>
+        </select>
+        <span asp-validation-for="Priority" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <select asp-for="Status" class="form-select">
+            <option value="Reported">Đã báo cáo</option>
+            <option value="In Progress">Đang xử lý</option>
+            <option value="Resolved">Đã giải quyết</option>
+            <option value="Canceled">Hủy</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="AttachedImagePath" class="form-label"></label>
+        <input asp-for="AttachedImagePath" class="form-control" type="file" />
+        <span asp-validation-for="AttachedImagePath" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("form").validate({
+                rules: {
+                    RoomId: { required: true },
+                    TenantId: { required: true },
+                    Title: { required: true },
+                    Description: { required: true },
+                    Priority: { required: true },
+                    Status: { required: true }
+                },
+                messages: {
+                    RoomId: { required: "Vui lòng chọn phòng" },
+                    TenantId: { required: "Vui lòng chọn người thuê" },
+                    Title: { required: "Vui lòng nhập tiêu đề" },
+                    Description: { required: "Vui lòng nhập mô tả" },
+                    Priority: { required: "Vui lòng chọn ưu tiên" },
+                    Status: { required: "Vui lòng chọn trạng thái" }
+                }
+            });
+        });
+    </script>
+}

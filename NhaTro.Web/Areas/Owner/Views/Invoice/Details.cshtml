@@ -1,0 +1,157 @@
+﻿@model NhaTro.Application.DTOs.InvoiceDto
+@using Microsoft.AspNetCore.Routing;
+@{
+    ViewData["Title"] = "Chi tiết Hóa đơn";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    int? currentMotelId = ViewBag.MotelId as int?;
+    int? currentContractId = ViewBag.ContractId as int?;
+    string motelName = ViewBag.MotelName as string;
+    string roomName = ViewBag.RoomName as string;
+    string billingPeriod = Model.BillingPeriod;
+
+    string titleText = $"Chi tiết Hóa đơn: {billingPeriod}";
+
+    RouteValueDictionary backRouteValues = new RouteValueDictionary();
+    backRouteValues.Add("area", "Owner");
+
+    string backAction = "Index";
+    string backController = "Invoice";
+
+    if (currentContractId.HasValue)
+    {
+        backRouteValues["controller"] = "Invoice";
+        backRouteValues.Add("contractId", currentContractId.Value);
+        backRouteValues.Add("motelId", currentMotelId ?? 0);
+    }
+    else if (currentMotelId.HasValue)
+    {
+        backRouteValues["controller"] = "Invoice";
+        backRouteValues.Add("motelId", currentMotelId.Value);
+    }
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">@titleText</h2>
+    <a asp-action="@backAction" asp-controller="@backController" asp-area="Owner" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="card-title text-primary mb-3">Thông tin Hóa đơn</h4>
+        <dl class="row">
+            <dt class="col-sm-3">ID Hóa đơn:</dt>
+            <dd class="col-sm-9">@Model.InvoiceId</dd>
+
+            <dt class="col-sm-3">Kỳ thanh toán:</dt>
+            <dd class="col-sm-9">@Model.BillingPeriod</dd>
+
+            <dt class="col-sm-3">Hợp đồng:</dt>
+            <dd class="col-sm-9">
+                @if (!string.IsNullOrEmpty(Model.ContractCode))
+                {
+                    <a asp-action="Details" asp-controller="Contract" asp-area="Owner" asp-route-id="@Model.ContractId">@Model.ContractCode</a>
+                }
+                else
+                {
+                    <span>Không xác định (ID: @Model.ContractId)</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Phòng:</dt> @* HIỂN THỊ RoomName *@
+            <dd class="col-sm-9">
+                @if (!string.IsNullOrEmpty(Model.RoomName))
+                {
+                    <a asp-action="Details" asp-controller="Room" asp-area="Owner" asp-route-id="@ViewBag.RoomId">@Model.RoomName</a>
+                }
+                else
+                {
+                    <span>N/A</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Người thuê:</dt> @* HIỂN THỊ TenantName *@
+            <dd class="col-sm-9">@(Model.TenantName ?? "N/A")</dd>
+
+            <dt class="col-sm-3">Tổng tiền:</dt>
+            <dd class="col-sm-9">@Model.TotalAmount.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VNĐ</dd>
+
+            <dt class="col-sm-3">Ngày đáo hạn:</dt>
+            <dd class="col-sm-9">@Model.DueDate.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Trạng thái:</dt>
+            <dd class="col-sm-9">
+                @{
+                    string statusText = Model.Status ?? "Không xác định";
+                    string statusClass = statusText switch
+                    {
+                        "Pending" => "badge bg-warning text-dark",
+                        "Paid" => "badge bg-success",
+                        "Overdue" => "badge bg-danger",
+                        "Canceled" => "badge bg-secondary",
+                        _ => "badge bg-info"
+                    };
+                }
+                <span class="@statusClass">@statusText</span>
+            </dd>
+
+            <dt class="col-sm-3">Ghi chú:</dt>
+            <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Notes) ? "Không có" : Model.Notes)</dd>
+
+            <dt class="col-sm-3">Ngày tạo:</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="d-flex justify-content-end">
+    <a asp-action="Edit" asp-route-id="@Model.InvoiceId" class="btn btn-warning me-2"><i class="fas fa-edit"></i> Chỉnh sửa</a>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteInvoiceModal" data-invoice-id="@Model.InvoiceId" data-invoice-code="@Model.BillingPeriod">
+        <i class="fas fa-trash-alt"></i> Xóa
+    </button>
+</div>
+
+@* Modal xác nhận xóa *@
+<div class="modal fade" id="deleteInvoiceModal" tabindex="-1" aria-labelledby="deleteInvoiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteInvoiceModalLabel">Xác nhận xóa hóa đơn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa hóa đơn "<span id="invoiceToDeleteCode" class="fw-bold text-danger"></span>" không?
+                Thao tác này không thể hoàn tác.
+            </div>
+            <div class="modal-footer">
+                <form asp-action="Delete" asp-controller="Invoice" asp-area="Owner" method="post" id="deleteInvoiceForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="invoiceToDeleteId" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteInvoiceModal = document.getElementById('deleteInvoiceModal');
+        deleteInvoiceModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var invoiceId = button.getAttribute('data-invoice-id');
+            var invoiceCode = button.getAttribute('data-invoice-code');
+
+            var modalBodyInvoiceCode = deleteInvoiceModal.querySelector('#invoiceToDeleteCode');
+            var modalFormInputId = deleteInvoiceModal.querySelector('#invoiceToDeleteId');
+
+            modalBodyInvoiceCode.textContent = invoiceCode;
+            modalFormInputId.value = invoiceId;
+        });
+    </script>
+}

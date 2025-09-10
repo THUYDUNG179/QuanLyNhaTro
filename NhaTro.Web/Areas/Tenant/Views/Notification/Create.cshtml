@@ -1,0 +1,78 @@
+﻿@model NhaTro.Application.DTOs.CreateNotificationDto
+@{
+    ViewData["Title"] = "Tạo Thông báo";
+    Layout = "~/Areas/Tenant/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Tạo Thông báo</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="SenderUserId" />
+    <div class="mb-3">
+        <label asp-for="ReceiverUserId" class="form-label">Người nhận</label>
+        <select asp-for="ReceiverUserId" class="form-select" asp-items="@ViewBag.Owners"></select>
+        <span asp-validation-for="ReceiverUserId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="RelatedMotelId" class="form-label">Nhà trọ liên quan</label>
+        <select asp-for="RelatedMotelId" class="form-select" asp-items="@ViewBag.Motels">
+            <option value="">-- Không chọn --</option>
+        </select>
+        <span asp-validation-for="RelatedMotelId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="RelatedRoomId" class="form-label">Phòng liên quan</label>
+        <select asp-for="RelatedRoomId" class="form-select" asp-items="@ViewBag.Rooms">
+            <option value="">-- Không chọn --</option>
+        </select>
+        <span asp-validation-for="RelatedRoomId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="RelatedContractId" class="form-label">Hợp đồng liên quan</label>
+        <select asp-for="RelatedContractId" class="form-select" asp-items="@ViewBag.Contracts">
+            <option value="">-- Không chọn --</option>
+        </select>
+        <span asp-validation-for="RelatedContractId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Content" class="form-label"></label>
+        <textarea asp-for="Content" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label"></label>
+        <select asp-for="Type" class="form-select">
+            <option value="General">Tổng quát</option>
+            <option value="TenantToOwner">Từ người thuê đến chủ</option>
+        </select>
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Gửi</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("form").validate({
+                rules: {
+                    ReceiverUserId: { required: true },
+                    Title: { required: true },
+                    Content: { required: true },
+                    Type: { required: true }
+                },
+                messages: {
+                    ReceiverUserId: { required: "Vui lòng chọn người nhận" },
+                    Title: { required: "Vui lòng nhập tiêu đề" },
+                    Content: { required: "Vui lòng nhập nội dung" },
+                    Type: { required: "Vui lòng chọn loại" }
+                }
+            });
+        });
+    </script>
+}

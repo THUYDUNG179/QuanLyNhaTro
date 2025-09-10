@@ -1,0 +1,131 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.MotelDto>
+@{
+    ViewData["Title"] = "Danh sách Nhà trọ";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Danh sách Nhà trọ của bạn</h2>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="fas fa-plus"></i> Tạo nhà trọ mới
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center" role="alert">
+        Bạn chưa có nhà trọ nào.
+        <a asp-action="Create" class="alert-link">Tạo nhà trọ mới ngay!</a>
+    </div>
+}
+else
+{
+    <table class="table table-hover table-bordered shadow-sm rounded-3 overflow-hidden">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>Tên nhà trọ <i class="fas fa-sort float-end"></i></th>
+                <th>Địa chỉ <i class="fas fa-sort float-end"></i></th>
+                <th>Mô tả</th>
+                <th class="text-center">Phòng</th>
+                <th class="text-center">Hợp đồng</th>
+                <th class="text-center">Thanh toán</th>
+                <th class="text-center">Sự cố</th>
+                <th class="text-center">Thông báo</th>
+                <th class="text-center">Hóa đơn</th>
+                <th class="text-center">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var motel in Model)
+            {
+                <tr>
+                    <td>@motel.MotelName</td>
+                    <td>@motel.Address</td>
+                    <td>@(string.IsNullOrEmpty(motel.Description) ? "Không có mô tả" : (motel.Description.Length > 50 ? motel.Description.Substring(0, 50) + "..." : motel.Description))</td>
+                   
+                    <td class="text-center">
+                        <a asp-action="Index" asp-controller="Room" asp-area="Owner" asp-route-motelId="@motel.MotelId" class="btn btn-sm btn-primary" title="Quản lý phòng">
+                            <i class="fas fa-bed"></i> Xem Phòng
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Index" asp-controller="Contract" asp-area="Owner" asp-route-motelId="@motel.MotelId" class="btn btn-sm btn-info" title="Quản lý hợp đồng">
+                            <i class="fas fa-file-contract"></i> Xem HĐ
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Index" asp-controller="Payment" asp-area="Owner" asp-route-motelId="@motel.MotelId" class="btn btn-sm btn-secondary" title="Quản lý thanh toán">
+                            <i class="fas fa-money-bill-wave"></i> Xem TT
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Index" asp-controller="Incident" asp-area="Owner" asp-route-motelId="@motel.MotelId" class="btn btn-sm btn-warning text-dark" title="Quản lý sự cố">
+                            <i class="fas fa-exclamation-triangle"></i> Xem SC
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Index" asp-controller="Notification" asp-area="Owner" asp-route-motelId="@motel.MotelId" class="btn btn-sm btn-success" title="Quản lý thông báo">
+                            <i class="fas fa-bell"></i> Xem TB
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Index" asp-controller="Invoice" asp-area="Owner" asp-route-motelId="@motel.MotelId" class="btn btn-sm btn-danger" title="Quản lý hóa đơn">
+                            <i class="fas fa-receipt"></i> Xem HĐơn
+                        </a>
+                    </td>
+
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <a asp-action="Details" asp-controller="Motel" asp-route-id="@motel.MotelId" class="btn btn-info btn-sm me-1" title="Chi tiết"><i class="fas fa-eye"></i></a>
+                            <a asp-action="Edit" asp-controller="Motel" asp-route-id="@motel.MotelId" class="btn btn-warning btn-sm me-1" title="Sửa"><i class="fas fa-edit"></i></a>
+                            <button type="button" class="btn btn-danger btn-sm" title="Xóa" data-bs-toggle="modal" data-bs-target="#deleteMotelModal" data-motel-id="@motel.MotelId" data-motel-name="@motel.MotelName">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@* Modal xác nhận xóa *@
+<div class="modal fade" id="deleteMotelModal" tabindex="-1" aria-labelledby="deleteMotelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteMotelModalLabel">Xác nhận xóa nhà trọ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa nhà trọ "<span id="motelToDeleteName" class="fw-bold text-danger"></span>" không?
+                Thao tác này sẽ xóa tất cả phòng và dữ liệu liên quan. Không thể hoàn tác.
+            </div>
+            <div class="modal-footer">
+                <form asp-action="Delete" asp-controller="Motel" method="post" id="deleteMotelForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="motelToDeleteId" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteMotelModal = document.getElementById('deleteMotelModal');
+        deleteMotelModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var motelId = button.getAttribute('data-motel-id');
+            var motelName = button.getAttribute('data-motel-name');
+
+            var modalBodyMotelName = deleteMotelModal.querySelector('#motelToDeleteName');
+            var modalFormInputId = deleteMotelModal.querySelector('#motelToDeleteId');
+
+            modalBodyMotelName.textContent = motelName;
+            modalFormInputId.value = motelId;
+        });
+    </script>
+}

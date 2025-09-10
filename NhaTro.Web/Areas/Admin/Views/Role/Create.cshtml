@@ -1,0 +1,23 @@
+﻿
+@model NhaTro.Application.DTOs.CreateRoleDto
+@{
+    ViewData["Title"] = "Tạo vai trò";
+    Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
+}
+<h2>Tạo vai trò mới</h2>
+<p>Vui lòng nhập thông tin vai trò, bao gồm tên và mô tả.</p>
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="RoleName" class="form-label">Tên vai trò</label>
+        <input asp-for="RoleName" class="form-control" placeholder="Nhập tên vai trò" />
+        <span asp-validation-for="RoleName" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Tạo vai trò</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+```

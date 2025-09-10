@@ -1,0 +1,44 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.IncidentDto>
+@{
+    ViewData["Title"] = "Danh sách Sự cố";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách Sự cố</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã sự cố</th>
+            <th>Phòng</th>
+            <th>Người thuê</th>
+            <th>Tiêu đề</th>
+            <th>Mô tả</th>
+            <th>Ưu tiên</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var incident in Model)
+        {
+            <tr>
+                <td>@incident.IncidentId</td>
+                <td>@incident.RoomId</td>
+                <td>@incident.TenantId</td>
+                <td>@incident.Title</td>
+                <td>@incident.Description</td>
+                <td>@incident.Priority</td>
+                <td>@incident.Status</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@incident.IncidentId" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@incident.IncidentId" class="btn btn-warning btn-sm">Sửa</a>
+                    <form asp-action="Delete" asp-route-id="@incident.IncidentId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

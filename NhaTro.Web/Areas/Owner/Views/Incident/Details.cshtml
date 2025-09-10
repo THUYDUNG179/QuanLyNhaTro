@@ -1,0 +1,182 @@
+﻿@model NhaTro.Application.DTOs.IncidentDto
+@using Microsoft.AspNetCore.Routing; @* THÊM DÒNG NÀY ĐỂ SỬ DỤNG RouteValueDictionary *@
+@{
+    ViewData["Title"] = "Chi tiết Sự cố";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    int? currentMotelId = ViewBag.MotelId as int?;
+    int? currentRoomId = ViewBag.RoomId as int?;
+    string motelName = ViewBag.MotelName as string;
+    string roomName = ViewBag.RoomName as string;
+
+    string titleText = $"Chi tiết Sự cố: {Model.Title}";
+
+    RouteValueDictionary backRouteValues = new RouteValueDictionary();
+    backRouteValues.Add("area", "Owner");
+
+    string backAction = "Index";
+    string backController = "Incident";
+
+    if (roomName != null && currentRoomId.HasValue)
+    {
+        titleText = $"Chi tiết Sự cố của phòng: {roomName}";
+        backAction = "Index";
+        backController = "Incident";
+        backRouteValues["controller"] = "Incident";
+        backRouteValues.Add("roomId", currentRoomId.Value);
+        backRouteValues.Add("motelId", currentMotelId ?? 0);
+    }
+    else if (motelName != null && currentMotelId.HasValue)
+    {
+        titleText = $"Chi tiết Sự cố của nhà trọ: {motelName}";
+        backAction = "Index";
+        backController = "Incident";
+        backRouteValues["controller"] = "Incident";
+        backRouteValues.Add("motelId", currentMotelId.Value);
+    }
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">@titleText</h2>
+    <a asp-action="@backAction" asp-controller="@backController" asp-area="Owner" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="card-title text-primary mb-3">Thông tin Sự cố</h4>
+        <dl class="row">
+            <dt class="col-sm-3">ID Sự cố:</dt>
+            <dd class="col-sm-9">@Model.IncidentId</dd>
+
+            <dt class="col-sm-3">Tiêu đề:</dt>
+            <dd class="col-sm-9">@Model.Title</dd>
+
+            <dt class="col-sm-3">Phòng:</dt>
+            <dd class="col-sm-9">
+                @if (Model.RoomName != null)
+                {
+                    <a asp-action="Details" asp-controller="Room" asp-area="Owner" asp-route-id="@Model.RoomId">@Model.RoomName (ID: @Model.RoomId)</a>
+                }
+                else
+                {
+                    <span>ID: @Model.RoomId (Không tìm thấy tên phòng)</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Người báo cáo:</dt>
+            <dd class="col-sm-9">
+                @(Model.TenantName ?? Model.OwnerName ?? "N/A")
+            </dd>
+
+            <dt class="col-sm-3">Mô tả:</dt>
+            <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Description) ? "Không có" : Model.Description)</dd>
+
+            <dt class="col-sm-3">Hình ảnh đính kèm:</dt> @* THÊM TRƯỜNG MỚI *@
+            <dd class="col-sm-9">
+                @if (!string.IsNullOrEmpty(Model.AttachedImagePath))
+                {
+                    <a href="@Url.Content(Model.AttachedImagePath)" target="_blank" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-image"></i> Xem hình ảnh
+                    </a>
+                }
+                else
+                {
+                    <span>Không có</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Ngày tạo:</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-3">Ngày cập nhật:</dt>
+            <dd class="col-sm-9">@(Model.UpdatedAt.HasValue ? Model.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm") : "N/A")</dd>
+
+            <dt class="col-sm-3">Ngày giải quyết:</dt>
+            <dd class="col-sm-9">@(Model.ResolvedAt.HasValue ? Model.ResolvedAt.Value.ToString("dd/MM/yyyy HH:mm") : "Chưa giải quyết")</dd>
+
+
+            <dt class="col-sm-3">Trạng thái:</dt>
+            <dd class="col-sm-9">
+                @{
+                    string statusText = Model.Status ?? "Không xác định";
+                    string statusClass = statusText switch
+                    {
+                        "Pending" => "badge bg-warning text-dark",
+                        "In Progress" => "badge bg-info",
+                        "Resolved" => "badge bg-success",
+                        _ => "badge bg-secondary"
+                    };
+                }
+                <span class="@statusClass">@statusText</span>
+            </dd>
+
+            <dt class="col-sm-3">Mức độ ưu tiên:</dt>
+            <dd class="col-sm-9">
+                @{
+                    string priorityText = Model.Priority ?? "Không xác định";
+                    string priorityClass = priorityText switch
+                    {
+                        "Low" => "badge bg-secondary",
+                        "Medium" => "badge bg-info",
+                        "High" => "badge bg-danger",
+                        "Critical" => "badge bg-dark",
+                        _ => "badge bg-light text-dark"
+                    };
+                }
+                <span class="@priorityClass">@priorityText</span>
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="d-flex justify-content-end">
+    <a asp-action="Edit" asp-route-id="@Model.IncidentId" class="btn btn-warning me-2"><i class="fas fa-edit"></i> Chỉnh sửa</a>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteIncidentModal" data-incident-id="@Model.IncidentId" data-incident-title="@Model.Title">
+        <i class="fas fa-trash-alt"></i> Xóa
+    </button>
+</div>
+
+@* Modal xác nhận xóa (Giống như trong Index.cshtml) *@
+<div class="modal fade" id="deleteIncidentModal" tabindex="-1" aria-labelledby="deleteIncidentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteIncidentModalLabel">Xác nhận xóa sự cố</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa sự cố "<span id="incidentToDeleteTitle" class="fw-bold text-danger"></span>" không?
+                Thao tác này không thể hoàn tác.
+            </div>
+            <div class="modal-footer">
+                <form asp-action="Delete" asp-controller="Incident" asp-area="Owner" method="post" id="deleteIncidentForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="incidentToDeleteId" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteIncidentModal = document.getElementById('deleteIncidentModal');
+        deleteIncidentModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var incidentId = button.getAttribute('data-incident-id');
+            var incidentTitle = button.getAttribute('data-incident-title');
+
+            var modalBodyIncidentTitle = deleteIncidentModal.querySelector('#incidentToDeleteTitle');
+            var modalFormInputId = deleteIncidentModal.querySelector('#incidentToDeleteId');
+
+            modalBodyIncidentTitle.textContent = incidentTitle;
+            modalFormInputId.value = incidentId;
+        });
+    </script>
+}

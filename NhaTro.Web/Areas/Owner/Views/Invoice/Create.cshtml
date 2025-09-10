@@ -1,0 +1,95 @@
+﻿@model NhaTro.Application.DTOs.CreateInvoiceDto
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Routing;
+@{
+    ViewData["Title"] = "Tạo Hóa đơn mới";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    int? currentMotelId = ViewBag.MotelId as int?;
+    int? currentContractId = ViewBag.ContractId as int?;
+    string motelName = ViewBag.MotelName as string;
+    string contractCode = ViewBag.ContractCode as string;
+
+    string titleText = "Tạo Hóa đơn mới";
+
+    RouteValueDictionary backRouteValues = new RouteValueDictionary();
+    backRouteValues.Add("area", "Owner");
+
+    string backAction = "Index";
+    string backController = "Invoice";
+
+    if (contractCode != null && currentContractId.HasValue)
+    {
+        titleText = $"Tạo Hóa đơn mới cho hợp đồng: {contractCode}";
+        backAction = "Index";
+        backController = "Invoice";
+        backRouteValues["controller"] = "Invoice";
+        backRouteValues.Add("contractId", currentContractId.Value);
+        backRouteValues.Add("motelId", currentMotelId ?? 0);
+    }
+    else if (motelName != null && currentMotelId.HasValue)
+    {
+        titleText = $"Tạo Hóa đơn mới cho nhà trọ: {motelName}";
+        backAction = "Index";
+        backController = "Motel";
+        backRouteValues["controller"] = "Motel";
+        backRouteValues.Add("motelId", currentMotelId.Value);
+    }
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">@titleText</h2>
+    <a asp-action="@backAction" asp-controller="@backController" asp-area="Owner" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger" role="alert">@TempData["Error"]</div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="ContractId" class="form-label">Hợp đồng</label>
+                <select asp-for="ContractId" class="form-control" asp-items="ViewBag.Contracts as SelectList"></select>
+                <span asp-validation-for="ContractId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="BillingPeriod" class="form-label">Kỳ thanh toán (YYYY-MM)</label>
+                <input asp-for="BillingPeriod" class="form-control" />
+                <span asp-validation-for="BillingPeriod" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TotalAmount" class="form-label">Tổng tiền</label>
+                <input asp-for="TotalAmount" class="form-control" type="number" step="1000" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DueDate" class="form-label">Ngày đáo hạn</label>
+                <input asp-for="DueDate" class="form-control" type="date" />
+                <span asp-validation-for="DueDate" class="text-danger"></span>
+            </div>
+            @* Status không có trong CreateInvoiceDto, sẽ được thiết lập ở backend *@
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label">Ghi chú</label>
+                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Tạo hóa đơn</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

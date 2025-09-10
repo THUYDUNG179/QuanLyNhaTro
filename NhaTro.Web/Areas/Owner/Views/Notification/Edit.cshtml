@@ -1,0 +1,51 @@
+﻿@model NhaTro.Application.DTOs.NotificationDto
+
+@{
+    ViewData["Title"] = "Thông báo";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <h2>Sửa thông báo</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="NotificationId" />
+                <input type="hidden" asp-for="SenderUserId" />
+                <input type="hidden" asp-for="ReceiverUserId" />
+                <input type="hidden" asp-for="RelatedMotelId" />
+                <input type="hidden" asp-for="RelatedRoomId" />
+                <input type="hidden" asp-for="RelatedContractId" />
+                <input type="hidden" asp-for="CreatedAt" />
+                <input type="hidden" asp-for="IsRead" />
+                <input type="hidden" asp-for="ReadAt" />
+
+                <div class="form-group mb-3">
+                    <label asp-for="Title" class="control-label">Tiêu đề</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Content" class="control-label">Nội dung</label>
+                    <textarea asp-for="Content" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="form-group d-flex mt-4">
+                    <button type="submit" class="btn btn-primary me-2">Lưu</button>
+                    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

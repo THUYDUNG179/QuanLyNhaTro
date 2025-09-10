@@ -1,0 +1,19 @@
+﻿@model NhaTro.Application.DTOs.RoomStatusDto
+@{
+    ViewData["Title"] = "Chi tiết Trạng thái Phòng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chi tiết Trạng thái Phòng</h2>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Mã trạng thái</dt>
+            <dd class="col-sm-9">@Model.RoomStatusId</dd>
+            <dt class="col-sm-3">Tên trạng thái</dt>
+            <dd class="col-sm-9">@Model.StatusName</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.RoomStatusId" class="btn btn-warning">Sửa</a>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

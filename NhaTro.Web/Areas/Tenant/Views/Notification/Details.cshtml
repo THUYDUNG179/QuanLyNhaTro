@@ -1,0 +1,38 @@
+﻿@model NhaTro.Application.DTOs.NotificationDto
+@{
+    ViewData["Title"] = "Chi tiết Thông báo";
+    Layout = "~/Areas/Tenant/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chi tiết Thông báo</h2>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Mã thông báo</dt>
+            <dd class="col-sm-9">@Model.NotificationId</dd>
+            <dt class="col-sm-3">Người gửi</dt>
+            <dd class="col-sm-9">@Model.SenderUserId</dd>
+            <dt class="col-sm-3">Người nhận</dt>
+            <dd class="col-sm-9">@Model.ReceiverUserId</dd>
+            <dt class="col-sm-3">Nhà trọ liên quan</dt>
+            <dd class="col-sm-9">@Model.RelatedMotelId</dd>
+            <dt class="col-sm-3">Phòng liên quan</dt>
+            <dd class="col-sm-9">@Model.RelatedRoomId</dd>
+            <dt class="col-sm-3">Hợp đồng liên quan</dt>
+            <dd class="col-sm-9">@Model.RelatedContractId</dd>
+            <dt class="col-sm-3">Tiêu đề</dt>
+            <dd class="col-sm-9">@Model.Title</dd>
+            <dt class="col-sm-3">Nội dung</dt>
+            <dd class="col-sm-9">@Model.Content</dd>
+            <dt class="col-sm-3">Loại</dt>
+            <dd class="col-sm-9">@Model.Type</dd>
+            <dt class="col-sm-3">Đã đọc</dt>
+            <dd class="col-sm-9">@(Model.IsRead ? "Đã đọc" : "Chưa đọc")</dd>
+            <dt class="col-sm-3">Ngày gửi</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy")</dd>
+            <dt class="col-sm-3">Ngày đọc</dt>
+            <dd class="col-sm-9">@(Model.ReadAt?.ToString("dd/MM/yyyy") ?? "Chưa đọc")</dd>
+        </dl>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

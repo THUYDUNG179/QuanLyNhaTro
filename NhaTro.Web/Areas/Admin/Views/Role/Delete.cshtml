@@ -1,0 +1,21 @@
+﻿```cshtml
+@model NhaTro.Application.DTOs.RoleDto
+@{
+    ViewData["Title"] = "Xóa vai trò";
+    Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
+}
+<h2>Xóa vai trò</h2>
+<p>Bạn có chắc muốn xóa vai trò này?</p>
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Tên vai trò</dt>
+        <dd class="col-sm-9">@Model.RoleName</dd>
+        <dt class="col-sm-3">Mô tả</dt>
+    </dl>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="RoleId" />
+        <button type="submit" class="btn btn-danger">Xóa vai trò</button>
+        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+```

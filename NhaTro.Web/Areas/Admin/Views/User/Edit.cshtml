@@ -1,0 +1,67 @@
+﻿@model NhaTro.Application.DTOs.UserDto
+@{
+    ViewData["Title"] = "Sửa Người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sửa Người dùng</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="UserId" />
+    <div class="mb-3">
+        <label asp-for="FullName" class="form-label"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="PasswordHash" class="form-label">Mật khẩu mới (nếu thay đổi)</label>
+        <input id="PasswordHash" name="PasswordHash" class="form-control" type="password" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="RoleId" class="form-label">Vai trò</label>
+        <select asp-for="RoleId" class="form-select">
+            <option value="1">Admin</option>
+            <option value="2">Chủ nhà trọ</option>
+            <option value="3">Người thuê</option>
+        </select>
+        <span asp-validation-for="RoleId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="IsActive" class="form-label">Hoạt động</label>
+        <input asp-for="IsActive" type="checkbox" class="form-check-input" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("form").validate({
+                rules: {
+                    FullName: { required: true },
+                    Email: { required: true, email: true },
+                    Phone: { required: true, digits: true },
+                    RoleId: { required: true }
+                },
+                messages: {
+                    FullName: { required: "Vui lòng nhập họ tên" },
+                    Email: { required: "Vui lòng nhập email", email: "Email không hợp lệ" },
+                    Phone: { required: "Vui lòng nhập số điện thoại", digits: "Số điện thoại chỉ chứa số" },
+                    RoleId: { required: "Vui lòng chọn vai trò" }
+                }
+            });
+        });
+    </script>
+}

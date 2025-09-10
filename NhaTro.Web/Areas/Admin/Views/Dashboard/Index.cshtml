@@ -1,0 +1,218 @@
+﻿
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dashboard-card {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 24px;
+        text-align: center;
+        margin-bottom: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 150px;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-icon {
+        font-size: 3rem;
+        margin-bottom: 12px;
+        color: #4CAF50;
+    }
+
+    .card-title {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 8px;
+    }
+
+    .card-value {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .color-blue {
+        color: #2196F3;
+    }
+
+    .color-green {
+        color: #4CAF50;
+    }
+
+    .color-purple {
+        color: #9C27B0;
+    }
+
+    .color-orange {
+        color: #FF9800;
+    }
+
+    .color-red {
+        color: #F44336;
+    }
+
+    .color-cyan {
+        color: #00BCD4;
+    }
+
+    .chart-card {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+</style>
+
+<div class="container-fluid">
+    <h1 class="mb-4">Bảng điều khiển & Thống kê</h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <i class="fas fa-user card-icon color-blue"></i>
+                <div class="card-title">Tổng số Người dùng</div>
+                <div class="card-value">@ViewBag.TotalUsers</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <i class="fas fa-hotel card-icon color-green"></i>
+                <div class="card-title">Tổng số Nhà trọ</div>
+                <div class="card-value">@ViewBag.TotalMotels</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <i class="fas fa-door-open card-icon color-purple"></i>
+                <div class="card-title">Tổng số Phòng</div>
+                <div class="card-value">@ViewBag.TotalRooms</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <i class="fas fa-file-signature card-icon color-orange"></i>
+                <div class="card-title">Tổng số Hợp đồng</div>
+                <div class="card-value">@ViewBag.TotalContracts</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <i class="fas fa-money-bill-wave card-icon color-green"></i>
+                <div class="card-title">Doanh thu tháng này</div>
+                <div class="card-value">@string.Format("{0:N0}", ViewBag.MonthlyRevenue) VND</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <i class="fas fa-exclamation-triangle card-icon color-red"></i>
+                <div class="card-title">Sự cố chờ xử lý</div>
+                <div class="card-value">@ViewBag.PendingIncidents</div>
+            </div>
+        </div>
+        <!-- Thêm các card khác nếu cần -->
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="chart-card">
+                <canvas id="userRoleChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-card">
+                <canvas id="roomStatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="chart-card">
+                <canvas id="contractTrendChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-card">
+                <canvas id="revenueTrendChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="chart-card">
+                <canvas id="incidentStatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        async function renderChart(url, ctxId, type, label, backgroundColor, borderColor) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                new Chart(document.getElementById(ctxId), {
+                    type: type,
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: label,
+                            data: data.values,
+                            backgroundColor: backgroundColor || ['#2196F3', '#4CAF50', '#FF9800', '#F44336', '#9C27B0'],
+                            borderColor: borderColor || '#333',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: label
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Lỗi khi tải dữ liệu biểu đồ:", error);
+            }
+        }
+
+        renderChart('/Admin/Dashboard/GetUserRoleDistribution', 'userRoleChart', 'pie', 'Phân bổ Người dùng theo vai trò');
+        renderChart('/Admin/Dashboard/GetRoomStatusDistribution', 'roomStatusChart', 'bar', 'Phân bổ Phòng theo trạng thái');
+        renderChart('/Admin/Dashboard/GetContractTrend', 'contractTrendChart', 'line', 'Số lượng Hợp đồng theo tháng');
+        renderChart('/Admin/Dashboard/GetRevenueTrend', 'revenueTrendChart', 'line', 'Doanh thu theo tháng');
+        renderChart('/Admin/Dashboard/GetIncidentStatusDistribution', 'incidentStatusChart', 'bar', 'Phân bổ Sự cố theo trạng thái');
+    </script>
+}

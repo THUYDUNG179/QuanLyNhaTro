@@ -1,0 +1,74 @@
+﻿@model NhaTro.Application.DTOs.CreateContractDto
+
+@{
+    ViewData["Title"] = "Tạo Hợp đồng";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-8 mx-auto">
+            <div class="bg-light rounded p-4">
+                <h5 class="mb-4">Tạo Hợp đồng mới</h5>
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="RoomId" class="form-label">Phòng</label>
+                        <select asp-for="RoomId" class="form-select" asp-items="@ViewBag.Rooms">
+                            <option value="">-- Chọn phòng --</option>
+                        </select>
+                        <span asp-validation-for="RoomId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="TenantId" class="form-label">Người thuê</label>
+                        <select asp-for="TenantId" class="form-select" asp-items="@ViewBag.Tenants">
+                            <option value="">-- Chọn người thuê --</option>
+                        </select>
+                        <span asp-validation-for="TenantId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="StartDate" class="form-label">Ngày bắt đầu</label>
+                        <input asp-for="StartDate" type="date" class="form-control" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="EndDate" class="form-label">Ngày kết thúc</label>
+                        <input asp-for="EndDate" type="date" class="form-control" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DepositAmount" class="form-label">Tiền cọc</label>
+                        <input asp-for="DepositAmount" type="number" step="0.01" class="form-control" />
+                        <span asp-validation-for="DepositAmount" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FileContract" class="form-label">File hợp đồng (PDF, JPG, PNG)</label>
+                        <input asp-for="FileContract" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
+                        <span asp-validation-for="FileContract" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Notes" class="form-label">Ghi chú</label>
+                        <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Tạo hợp đồng</button>
+                        <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

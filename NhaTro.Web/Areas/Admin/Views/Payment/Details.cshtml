@@ -1,0 +1,27 @@
+﻿@model NhaTro.Application.DTOs.PaymentDto
+@{
+    ViewData["Title"] = "Chi tiết Thanh toán";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chi tiết Thanh toán</h2>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Mã thanh toán</dt>
+            <dd class="col-sm-9">@Model.PaymentId</dd>
+            <dt class="col-sm-3">Hóa đơn</dt>
+            <dd class="col-sm-9">@Model.InvoiceId</dd>
+            <dt class="col-sm-3">Số tiền</dt>
+            <dd class="col-sm-9">@Model.Amount.ToString("#,##0 'đ'")</dd>
+            <dt class="col-sm-3">Ngày thanh toán</dt>
+            <dd class="col-sm-9">@Model.PaymentDate.ToString("dd/MM/yyyy")</dd>
+            <dt class="col-sm-3">Phương thức</dt>
+            <dd class="col-sm-9">@Model.Method</dd>
+            <dt class="col-sm-3">Trạng thái</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.PaymentId" class="btn btn-warning">Sửa</a>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

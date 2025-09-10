@@ -1,0 +1,65 @@
+﻿@model NhaTro.Application.DTOs.CreateIncidentDto
+
+@{
+    ViewData["Title"] = "Bao cao su co moi";
+    Layout = "~/Areas/Tenant/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mb-4">Bao cao su co moi</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label for="RoomId" class="form-label">Phong</label>
+                <select id="RoomId" asp-for="RoomId" asp-items="@ViewBag.Rooms" class="form-control" required>
+                    <option value="">-- Chon phong cua ban --</option>
+                </select>
+                <span asp-validation-for="RoomId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="form-label">Tieu de</label>
+                <input asp-for="Title" class="form-control" required />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="form-label">Mo ta</label>
+                <textarea asp-for="Description" class="form-control" required></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Priority" class="form-label">Muc do uu tien</label>
+                <select asp-for="Priority" class="form-control">
+                    <option value="Normal">Binh thuong</option>
+                    <option value="Low">Thap</option>
+                    <option value="Medium">Trung binh</option>
+                    <option value="High">Cao</option>
+                    <option value="Critical">Rat cao</option>
+                </select>
+                <span asp-validation-for="Priority" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="AttachedImagePath" class="form-label">Hinh anh dinh kem (URL)</label>
+                <input asp-for="AttachedImagePath" type="url" class="form-control" />
+                <span asp-validation-for="AttachedImagePath" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">Gui bao cao</button>
+                <a asp-action="Index" class="btn btn-secondary">Huy</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

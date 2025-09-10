@@ -1,0 +1,31 @@
+﻿```cshtml
+@model IEnumerable<NhaTro.Application.DTOs.RoleDto>
+@{
+    ViewData["Title"] = "Danh sách vai trò";
+    Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
+}
+<h2>Danh sách vai trò</h2>
+<p>Danh sách này hiển thị tất cả vai trò trong hệ thống.</p>
+<a asp-action="Create" class="btn btn-primary mb-3">Tạo vai trò mới</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên vai trò</th>
+            <th>Mô tả</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+                <tr>
+                    <td>@role.RoleName</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@role.RoleId" class="btn btn-warning btn-sm">Sửa</a>
+                        <a asp-action="Delete" asp-route-id="@role.RoleId" class="btn btn-danger btn-sm">Xóa</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+```

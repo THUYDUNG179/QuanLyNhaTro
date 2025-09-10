@@ -1,0 +1,55 @@
+﻿@model NhaTro.Application.DTOs.ContractDto
+@{
+    ViewData["Title"] = "Chi tiết Hợp đồng";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chi tiết Hợp đồng</h2>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Mã hợp đồng</dt>
+            <dd class="col-sm-9">@Model.ContractId</dd>
+
+            <dt class="col-sm-3">Phòng</dt>
+            <dd class="col-sm-9">@Model.RoomName</dd>
+
+            <dt class="col-sm-3">Người thuê</dt>
+            <dd class="col-sm-9">@Model.TenantName</dd>
+
+            <dt class="col-sm-3">Ngày bắt đầu</dt>
+            <dd class="col-sm-9">@Model.StartDate.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Ngày kết thúc</dt>
+            <dd class="col-sm-9">@(Model.EndDate?.ToString("dd/MM/yyyy") ?? "Không xác định")</dd>
+
+            <dt class="col-sm-3">Tiền cọc</dt>
+            <dd class="col-sm-9">@Model.DepositAmount</dd>
+
+            <dt class="col-sm-3">Trạng thái</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+
+            <dt class="col-sm-3">Ghi chú</dt>
+            <dd class="col-sm-9">@Model.Notes</dd>
+
+            <dt class="col-sm-3">Tệp hợp đồng</dt>
+            <dd class="col-sm-9">
+                @if (!string.IsNullOrEmpty(Model.FileContractPath))
+                {
+                    <a href="@Model.FileContractPath" target="_blank">
+                        <img src="@Model.FileContractPath" alt="Tệp hợp đồng" class="img-fluid" style="max-width: 500px; height: auto;" />
+                    </a>
+                }
+                else
+                {
+                    <span>Không có tệp đính kèm</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Ngày tạo</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy")</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.ContractId" class="btn btn-warning">Sửa</a>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

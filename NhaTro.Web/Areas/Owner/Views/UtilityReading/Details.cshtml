@@ -1,0 +1,32 @@
+﻿@model NhaTro.Application.DTOs.UtilityReadingDto
+
+@{
+    ViewData["Title"] = "Chi tiết chỉ số";
+}
+
+<div class="container-fluid">
+    <h2>Chi tiết chỉ số</h2>
+    <hr />
+    <div>
+        <dl class="row">
+            <dt class="col-sm-3">Nhà trọ:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.MotelName)</dd>
+
+            <dt class="col-sm-3">Phòng:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.RoomName)</dd>
+
+            <dt class="col-sm-3">Ngày đọc:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.ReadingDate)</dd>
+
+            <dt class="col-sm-3">Mã tiện ích:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.UtilityId)</dd>
+
+            <dt class="col-sm-3">Giá trị:</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.ReadingValue)</dd>
+        </dl>
+    </div>
+    <div class="d-flex mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.ReadingId" class="btn btn-warning me-2">Sửa</a>
+        <a asp-action="Index" asp-route-roomId="@Model.RoomId" class="btn btn-secondary">Quay lại danh sách</a>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+﻿@model IEnumerable<NhaTro.Application.DTOs.ContractDto>
+
+@{
+    ViewData["Title"] = "Quản lý Hợp Đồng";
+    Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0">Danh sách Hợp đồng</h5>
+                    <a asp-action="Create" asp-route-roomId="@ViewBag.RoomId" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>Tạo hợp đồng mới
+                    </a>
+                </div>
+
+                <div class="mb-3">
+                    @if (ViewBag.MotelName != null)
+                    {
+                        <h6 class="text-primary">
+                            <i class="bi bi-house-door me-2"></i>Nhà trọ: **@ViewBag.MotelName**
+                        </h6>
+                    }
+                    @if (ViewBag.RoomName != null)
+                    {
+                        <h6 class="text-secondary">
+                            <i class="bi bi-door-open me-2"></i>Phòng: **@ViewBag.RoomName**
+                        </h6>
+                    }
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table text-start align-middle table-bordered table-hover mb-0">
+                        <thead>
+                            <tr class="text-dark">
+                                <th scope="col">Phòng</th>
+                                <th scope="col">Người thuê</th>
+                                <th scope="col">Ngày bắt đầu</th>
+                                <th scope="col">Ngày kết thúc</th>
+                                <th scope="col">Tiền cọc</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.RoomName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.TenantName)</td>
+                                        <td>@item.StartDate.ToShortDateString()</td>
+                                        <td>@(item.EndDate.HasValue ? item.EndDate.Value.ToShortDateString() : "Chưa có")</td>
+                                        <td>@item.DepositAmount.ToString("N0") VNĐ</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.ContractId" class="btn btn-sm btn-info text-white me-2">
+                                                <i class="bi bi-info-circle">Chi tiết</i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.ContractId" class="btn btn-sm btn-warning text-white me-2">
+                                                <i class="bi bi-pencil-square">Sửa</i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.ContractId">
+                                                <i class="bi bi-trash">Xóa</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="7" class="text-center">Chưa có hợp đồng nào.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa hợp đồng này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <form id="deleteForm" asp-action="Delete" method="post">
+                    <input type="hidden" id="contractIdToDelete" name="id" />
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var contractId = button.getAttribute('data-id');
+            var form = document.getElementById('deleteForm');
+            var input = document.getElementById('contractIdToDelete');
+            input.value = contractId;
+        });
+    </script>
+}
