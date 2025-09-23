@@ -16,5 +16,6 @@ namespace NhaTro.Domain.Interfaces
         Task DeleteAsync(T entity);
         Task SaveChangesAsync();
         IQueryable<T> GetAll();
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
     }
 }

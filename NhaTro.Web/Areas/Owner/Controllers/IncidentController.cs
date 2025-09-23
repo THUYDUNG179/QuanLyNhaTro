@@ -18,7 +18,8 @@ namespace NhaTro.Web.Areas.Owner.Controllers
         private readonly IIncidentService _incidentService;
         private readonly IRoomService _roomService;
         private readonly IMotelService _motelService;
-        private readonly IUserService _userService; 
+        private readonly IUserService _userService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public IncidentController(IIncidentService incidentService, IRoomService roomService, IMotelService motelService, IUserService userService)
         {
@@ -216,7 +217,7 @@ namespace NhaTro.Web.Areas.Owner.Controllers
             ViewBag.Rooms = new SelectList(ownerRooms, "RoomId", "RoomDisplayName", roomId);
             ViewBag.MotelId = motelId;
             // TenantId sẽ là null hoặc 0 nếu Owner tạo
-            return View(new CreateIncidentDto { RoomId = roomId ?? 0, TenantId = null }); 
+            return View(new CreateIncidentDto { RoomId = roomId ?? 0, TenantId = null });
         }
 
         [HttpPost]
@@ -256,8 +257,24 @@ namespace NhaTro.Web.Areas.Owner.Controllers
                     return View(incidentDto);
                 }
 
-                incidentDto.TenantId = null; 
-                // Priority có default trong DTO, Status sẽ được set bởi service
+                // Xử lý upload ảnh
+                if (incidentDto.AttachedImageFile != null)
+                {
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "incidents");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + incidentDto.AttachedImageFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await incidentDto.AttachedImageFile.CopyToAsync(fileStream);
+                    }
+                    incidentDto.AttachedImagePath = Path.Combine("images", "incidents", uniqueFileName);
+                }
+
+                incidentDto.TenantId = null;
                 await _incidentService.AddIncidentAsync(incidentDto);
                 TempData["Success"] = "Tạo sự cố mới thành công!";
                 return RedirectToAction(nameof(Index), new { roomId = incidentDto.RoomId, motelId = currentMotelId });

@@ -13,6 +13,7 @@
         <div class="col-md-6">
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+               
                 <div class="form-group mb-3">
                     <label asp-for="RelatedMotelId" class="control-label">Nhà trọ liên quan (Tùy chọn)</label>
                     <select asp-for="RelatedMotelId" class="form-control" asp-items="ViewBag.MotelId">
@@ -27,6 +28,13 @@
                         <option value="">-- Chọn phòng --</option>
                     </select>
                     <span asp-validation-for="RelatedRoomId" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="ReceiverUserId" class="control-label">Người nhận</label>
+                    <select asp-for="ReceiverUserId" class="form-control" asp-items="ViewBag.ReceiverUserId">
+                        <option value="">-- Chọn người nhận --</option>
+                    </select>
+                    <span asp-validation-for="ReceiverUserId" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">

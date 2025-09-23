@@ -12,5 +12,6 @@ namespace NhaTro.Application.Interfaces
         Task UpdateIncidentAsync(IncidentDto incidentDto);
         Task DeleteIncidentAsync(int incidentId);
         Task<int> GetTotalIncidentsCountAsync();
+
     }
 }

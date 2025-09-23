@@ -11,5 +11,6 @@ namespace NhaTro.Application.Interfaces
         Task AddRoomStatusAsync(CreateRoomStatusDto roomStatusDto);
         Task UpdateRoomStatusAsync(RoomStatusDto roomStatusDto);
         Task DeleteRoomStatusAsync(int roomStatusId);
+
     }
 }

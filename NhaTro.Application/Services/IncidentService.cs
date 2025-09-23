@@ -64,7 +64,6 @@ namespace NhaTro.Application.Services
             var incident = new Incident
             {
                 RoomId = incidentDto.RoomId,
-                TenantId = (int)incidentDto.TenantId,
                 Title = incidentDto.Title,
                 Description = incidentDto.Description,
                 Priority = incidentDto.Priority,

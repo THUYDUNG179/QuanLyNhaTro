@@ -13,11 +13,19 @@ namespace NhaTro.Application.Services
     {
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<Role> _roleRepository;
+        private readonly IRepository<Motel> _motelRepository;
+        private readonly IRepository<Room> _roomRepository;
+        private readonly IRepository<Contract> _contractRepository;
 
-        public UserService(IRepository<User> userRepository, IRepository<Role> roleRepository)
+        public UserService(IRepository<User> userRepository, IRepository<Role> roleRepository, 
+            IRepository<Motel> motelRepository, IRepository<Room> roomRepository, 
+            IRepository<Contract> contractRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _motelRepository = motelRepository;
+            _roomRepository = roomRepository;
+            _contractRepository = contractRepository;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
@@ -141,6 +149,41 @@ namespace NhaTro.Application.Services
             var allUsers = await _userRepository.GetAllAsync();
             // Giả định rằng bạn có một cách để xác định người thuê (ví dụ: vai trò, hoặc loại người dùng)
             return allUsers.Count(u => u.Role.RoleName == "Tenant");
+        }
+        public async Task<IEnumerable<UserDto>> GetAllTenantsForOwnerAsync(int ownerId)
+        {
+            // Lấy tất cả các nhà trọ thuộc về chủ nhà
+            var motels = await _motelRepository.GetAllAsync();
+            var ownerMotelIds = motels.Where(m => m.OwnerId == ownerId).Select(m => m.MotelId).ToHashSet();
+
+            // Lấy tất cả các phòng thuộc về các nhà trọ đó
+            var rooms = await _roomRepository.GetAllAsync();
+            var ownerRoomIds = rooms.Where(r => ownerMotelIds.Contains(r.MotelId)).Select(r => r.RoomId).ToHashSet();
+
+            // Lấy tất cả các hợp đồng liên quan đến các phòng đó
+            var contracts = await _contractRepository.GetAllAsync();
+            var relevantContracts = contracts.Where(c => ownerRoomIds.Contains(c.RoomId));
+
+            // Lấy danh sách ID người thuê từ các hợp đồng
+            var tenantIds = relevantContracts.Select(c => c.TenantId).Distinct().ToList();
+
+            // Lấy thông tin người dùng (người thuê)
+            var users = await _userRepository.GetAllAsync();
+            var tenants = users.Where(u => tenantIds.Contains(u.UserId)).ToList();
+
+            // Ánh xạ sang UserDto
+            var roles = await _roleRepository.GetAllAsync();
+            return tenants.Select(t => new UserDto
+            {
+                UserId = t.UserId,
+                FullName = t.FullName,
+                Email = t.Email,
+                Phone = t.Phone,
+                RoleId = t.RoleId,
+                RoleName = roles.FirstOrDefault(r => r.RoleId == t.RoleId)?.RoleName,
+                IsActive = t.IsActive,
+                CreatedAt = t.CreatedAt
+            });
         }
     }
 }

@@ -233,7 +233,7 @@ namespace NhaTro.Application.Services
                 .Select(u => new UserDto
                 {
                     UserId = u.UserId,
-                    UserName = u.UserName,
+                    FullName = u.FullName,
                     // Thêm các thuộc tính khác của User nếu cần
                 })
                 .ToListAsync();

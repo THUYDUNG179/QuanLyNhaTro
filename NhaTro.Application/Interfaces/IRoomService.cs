@@ -13,5 +13,6 @@ namespace NhaTro.Application.Interfaces
         Task DeleteRoomAsync(int roomId);
         Task<int> GetTotalRoomsCountAsync();
         Task<IEnumerable<RoomDto>> GetRoomsByMotelIdAsync(int motelId);
+        Task<IEnumerable<RoomDto>> GetRoomsByOwnerIdAsync(int ownerId);
     }
 }

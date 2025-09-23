@@ -23,7 +23,7 @@ namespace NhaTro.Application.DTOs
 
     public class CreateNotificationDto
     {
-        [Required(ErrorMessage = "Vui lòng chọn người nhận.")]
+
         public int ReceiverUserId { get; set; }
 
         [Required(ErrorMessage = "Tiêu đề không được để trống.")]

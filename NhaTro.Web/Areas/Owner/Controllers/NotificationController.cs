@@ -72,12 +72,12 @@ namespace NhaTro.Web.Areas.Owner.Controllers
             var tenantList = allTenants.Select(t => new
             {
                 t.UserId,
-                t.UserName
+                t.FullName
             }).ToList();
 
             ViewBag.MotelId = new SelectList(ownerMotels, "MotelId", "MotelName");
             ViewBag.RoomId = new SelectList(roomsWithTenants, "RoomId", "RoomDisplay");
-            ViewBag.ReceiverUserId = new SelectList(tenantList, "UserId", "UserName");
+            ViewBag.ReceiverUserId = new SelectList(tenantList, "UserId", "FullName");
         }
 
 
@@ -206,7 +206,7 @@ namespace NhaTro.Web.Areas.Owner.Controllers
                 await _notificationService.AddNotificationAsync(notificationDto);
                 TempData["Success"] = "Gửi thông báo thành công!";
                 return RedirectToAction(nameof(Index));
-            }
+            } 
             catch (InvalidOperationException ex)
             {
                 TempData["Error"] = ex.Message;
@@ -214,8 +214,16 @@ namespace NhaTro.Web.Areas.Owner.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Đã xảy ra lỗi không mong muốn khi gửi thông báo: " + ex.Message);
-                TempData["Error"] = "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.";
+                string errorMessage = "Đã xảy ra lỗi không mong muốn khi gửi thông báo.";
+                if (ex.InnerException != null)
+                {
+                    errorMessage = ex.InnerException.Message;
+                }
+
+                ModelState.AddModelError(string.Empty, errorMessage);
+                TempData["Error"] = errorMessage; // Hiển thị lỗi chi tiết lên TempData
+
+                await PopulateViewDataForCreate(GetCurrentOwnerId()); // Cần tải lại ViewBag
                 return View(notificationDto);
             }
         }

@@ -4,6 +4,7 @@ using NhaTro.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace NhaTro.Infrastructure.Repositories
@@ -47,6 +48,10 @@ namespace NhaTro.Infrastructure.Repositories
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
         }
         public IQueryable<T> GetAll()
         {

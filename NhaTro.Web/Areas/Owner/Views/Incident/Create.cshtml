@@ -1,6 +1,6 @@
 ﻿@model NhaTro.Application.DTOs.CreateIncidentDto
 @using Microsoft.AspNetCore.Mvc.Rendering
-@using Microsoft.AspNetCore.Routing; @* THÊM DÒNG NÀY ĐỂ SỬ DỤNG RouteValueDictionary *@
+@using Microsoft.AspNetCore.Routing;
 @{
     ViewData["Title"] = "Tạo Sự cố mới";
     Layout = "~/Areas/Owner/Views/Shared/_Layout.cshtml";
@@ -11,6 +11,7 @@
     int? currentRoomId = ViewBag.RoomId as int?;
     string motelName = ViewBag.MotelName as string;
     string roomName = ViewBag.RoomName as string;
+    string tenantName = ViewBag.TenantName as string;
 
     string titleText = "Tạo Sự cố mới";
 
@@ -41,7 +42,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0">@titleText</h2>
-    <a asp-action="@backAction" asp-controller="@backController" asp-area="Owner"  class="btn btn-secondary">
+    <a asp-action="@backAction" asp-controller="@backController" asp-area="Owner" class="btn btn-secondary">
         <i class="fas fa-arrow-left"></i> Quay lại
     </a>
 </div>
@@ -53,18 +54,13 @@
 
 <div class="card shadow-sm">
     <div class="card-body">
-        <form asp-action="Create" enctype="multipart/form-data"> 
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="mb-3">
                 <label asp-for="RoomId" class="form-label">Phòng</label>
                 <select asp-for="RoomId" class="form-control" asp-items="ViewBag.Rooms as SelectList"></select>
                 <span asp-validation-for="RoomId" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="TenantId" class="form-label">Người thuê</label>
-                <select asp-for="TenantId" class="form-control" asp-items="ViewBag.Users as SelectList"></select>
-                <span asp-validation-for="TenantId" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Title" class="form-label">Tiêu đề</label>
@@ -87,11 +83,12 @@
                 </select>
                 <span asp-validation-for="Priority" class="text-danger"></span>
             </div>
+
+            @* Sửa đổi quan trọng ở đây *@
             <div class="mb-3">
-                <label for="IncidentImages" class="form-label">Hình ảnh đính kèm (nếu có)</label>
-                <input type="file" id="IncidentImages" name="IncidentImages" class="form-control" multiple accept="image/*" />
+                <label asp-for="AttachedImageFile" class="form-label">Hình ảnh đính kèm (nếu có)</label>
+                <input asp-for="AttachedImageFile" type="file" class="form-control" accept="image/*" />
             </div>
-            
 
             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Tạo sự cố</button>
         </form>

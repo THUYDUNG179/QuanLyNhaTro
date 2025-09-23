@@ -83,18 +83,14 @@ else
                                 <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-room-id="@room.RoomId" data-room-name="@room.RoomName" title="Xóa">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
-
-                                @* Sửa logic hiển thị nút HĐ tại đây *@
                                 @if (room.HasContract)
                                 {
-                                    // Hiển thị nút "Xem HĐ" nếu phòng đã có hợp đồng
                                     <a asp-area="Owner" asp-controller="Contract" asp-action="Index" asp-route-roomId="@room.RoomId" class="btn btn-sm btn-success" title="Xem hợp đồng">
                                         <i class="fas fa-search"></i> HĐ
                                     </a>
                                 }
                                 else
                                 {
-                                    // Hiển thị nút "Tạo HĐ" nếu phòng chưa có hợp đồng
                                     <a asp-area="Owner" asp-controller="Contract" asp-action="Create" asp-route-roomId="@room.RoomId" class="btn btn-sm btn-info" title="Tạo hợp đồng mới">
                                         <i class="fas fa-file-signature"></i> HĐ
                                     </a>

@@ -13,5 +13,6 @@ namespace NhaTro.Application.Interfaces
         Task DeleteUserAsync(int userId);
         Task<UserDto> AuthenticateAsync(string email, string password);
         Task<int> GetTotalTenantsCountAsync();
+        Task<IEnumerable<UserDto>> GetAllTenantsForOwnerAsync(int ownerId);
     }
 }

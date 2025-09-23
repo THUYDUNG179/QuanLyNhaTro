@@ -144,7 +144,6 @@ namespace NhaTro.Web.Areas.Tenant.Controllers
             try
             {
                 var tenantId = GetCurrentTenantId();
-                createIncidentDto.TenantId = tenantId;
 
                 await _incidentService.AddIncidentAsync(createIncidentDto);
                 TempData["Success"] = "Đã báo cáo sự cố thành công!";

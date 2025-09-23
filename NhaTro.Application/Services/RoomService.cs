@@ -12,7 +12,8 @@ namespace NhaTro.Application.Services
     public class RoomService : IRoomService
     {
         private readonly IRepository<Room> _roomRepository;
-        private readonly IRepository<Contract> _contractRepository; // Thêm Contract Repository
+        private readonly IRepository<Contract> _contractRepository;
+        private readonly IRepository<Motel> _motelRepository;
 
         public RoomService(IRepository<Room> roomRepository, IRepository<Contract> contractRepository)
         {
@@ -183,6 +184,35 @@ namespace NhaTro.Application.Services
         {
             var allRooms = await _roomRepository.GetAllAsync();
             return allRooms.Count();
+        }
+        public async Task<IEnumerable<RoomDto>> GetRoomsByOwnerIdAsync(int ownerId)
+        {
+            // Lấy tất cả các nhà trọ thuộc về chủ nhà
+            var motels = await _motelRepository.GetAllAsync();
+            var ownerMotelIds = motels.Where(m => m.OwnerId == ownerId).Select(m => m.MotelId).ToHashSet();
+
+            // Lấy tất cả các phòng thuộc về các nhà trọ đó
+            var allRooms = await _roomRepository.GetAllAsync();
+            var rooms = allRooms.Where(r => ownerMotelIds.Contains(r.MotelId)).ToList();
+
+            // Lấy danh sách ID phòng có hợp đồng đang có hiệu lực
+            var activeContractRoomIds = (await _contractRepository.GetAllAsync())
+                                                                 .Where(c => c.EndDate.HasValue && c.EndDate.Value >= DateOnly.FromDateTime(DateTime.Now))
+                                                                 .Select(c => c.RoomId)
+                                                                 .ToHashSet();
+
+            // Ánh xạ sang RoomDto và gán giá trị HasContract
+            return rooms.Select(r => new RoomDto
+            {
+                RoomId = r.RoomId,
+                MotelId = r.MotelId,
+                RoomName = r.RoomName,
+                RentalPrice = r.RentalPrice,
+                Area = r.Area,
+                RoomStatusId = r.RoomStatusId,
+                CreatedAt = r.CreatedAt,
+                HasContract = activeContractRoomIds.Contains(r.RoomId)
+            }).ToList();
         }
     }
 }
